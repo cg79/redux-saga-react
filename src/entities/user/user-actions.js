@@ -6,7 +6,13 @@ const getUsersRequestTake = (dispatch, reqid) =>
     reqid,
   });
 
-  const getUsersRequestTakeUnblock = (dispatch, reqid) =>
+const getUsersRequestTakeFork = (dispatch, reqid) =>
+  dispatch({
+    type: USER_ACTIONS.GET_USERS_REQUEST_TAKE_FORK,
+    reqid,
+  });
+
+const getUsersRequestTakeUnblock = (dispatch, reqid) =>
   dispatch({
     type: USER_ACTIONS.GET_USERS_REQUEST_TAKE_UNBLOCK,
     reqid,
@@ -30,13 +36,11 @@ const getUsersRequestTakeLeading = (dispatch, reqid) =>
     reqid,
   });
 
-  const getUsersRequestTakeMaybe = (dispatch, reqid) =>
+const getUsersRequestTakeMaybe = (dispatch, reqid) =>
   dispatch({
     type: USER_ACTIONS.GET_USERS_REQUEST_MAYBE,
     reqid,
   });
-
-  
 
 const getUsersSuccess = (items) => ({
   type: USER_ACTIONS.GET_USERS_SUCCESS,
@@ -49,6 +53,7 @@ const getUsersSuccess = (items) => ({
 
 const userActions = {
   getUsersRequestTake,
+  getUsersRequestTakeFork,
   getUsersRequestTakeUnblock,
   getUsersRequestLatest,
   getUsersRequestTakeEvery,

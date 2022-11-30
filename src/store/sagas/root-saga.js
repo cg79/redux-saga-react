@@ -28,6 +28,8 @@ export default function* rootSagas() {
   yield all([
     userSagas.watchGetUsersRequest(),
     userSagas.watchTake(),
+    userSagas.watchTakeFork(),
+    // watchIncrementAsync()
 
   ]);
 }

@@ -30,6 +30,18 @@ const UserComponent = () => {
     }, 700);
   };
 
+  const getUsersTakeFork = () => {
+    let count = 0;
+    setInterval((el) => {
+      while (count < 7) {
+        count++;
+        userActions.getUsersRequestTakeFork(dispatch, count);
+      }
+    }, 700);
+  };
+
+  
+
   const getUsersRequestTakeUnblock = () => {
     let count = 0;
     setInterval((el) => {
@@ -91,9 +103,15 @@ const UserComponent = () => {
         getUsersRequestTake
       </button>
 
+      <button className={style.increment} onClick={getUsersTakeFork}>
+        getUsersRequestTakeFork
+      </button>
+
       <button className={style.increment} onClick={getUsersRequestTakeUnblock}>
       getUsersRequestTakeUnblock
       </button>
+
+      <div>------</div>
 
       <button className={style.increment} onClick={getUsersTakeLast}>
         getUsersRequestLatest
