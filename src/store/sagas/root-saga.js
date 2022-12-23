@@ -29,6 +29,9 @@ export default function* rootSagas() {
     userSagas.watchGetUsersRequest(),
     userSagas.watchTake(),
     userSagas.watchTakeFork(),
+    userSagas.watchChannelRequests(),
+    userSagas.watchChannelRequestsFork(),
+    userSagas.watchCountDown(),
     // watchIncrementAsync()
 
   ]);

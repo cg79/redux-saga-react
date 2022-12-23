@@ -6,6 +6,13 @@ const getUsersRequestTake = (dispatch, reqid) =>
     reqid,
   });
 
+  const channelCountDown = (dispatch) =>{
+
+    dispatch({
+      type: USER_ACTIONS.COUNT_DOWN,
+    });
+  }
+
 const getUsersRequestTakeFork = (dispatch, reqid) =>
   dispatch({
     type: USER_ACTIONS.GET_USERS_REQUEST_TAKE_FORK,
@@ -42,6 +49,18 @@ const getUsersRequestTakeMaybe = (dispatch, reqid) =>
     reqid,
   });
 
+  const watchChannelRequests = (dispatch, reqid) =>
+  dispatch({
+    type: USER_ACTIONS.CHANNEL_REQUEST,
+    reqid,
+  });
+
+  const watchChannelRequestsFork = (dispatch, reqid) =>
+  dispatch({
+    type: USER_ACTIONS.CHANNEL_REQUEST_FORK,
+    reqid,
+  });
+
 const getUsersSuccess = (items) => ({
   type: USER_ACTIONS.GET_USERS_SUCCESS,
   payload: items,
@@ -60,7 +79,10 @@ const userActions = {
 
   getUsersRequestTakeLeading,
   getUsersRequestTakeMaybe,
+  watchChannelRequests,
+  watchChannelRequestsFork,
   getUsersSuccess,
+  channelCountDown
 };
 
 export default userActions;

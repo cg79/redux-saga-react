@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+# packages
+<a href="http://example.com/" target="_blank" onclick="return false;">Hello, world!</a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<a href="#pookie" onclick="return false;">pookie0</a>
 
-## Available Scripts
+# Header
+`npm install redux redux-saga --save`
 
-In the project directory, you can run:
+# My Anchored Heading {#my-anchor}
 
-### `npm start`
+1. What is redux-saga 
+Redux is a state management library, while Redux Saga is a library that focuses on managing *side effects*
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+USAGE
+1. Dispatch an action
 
-### `npm test`
+```
+onSomeButtonClicked() {
+    const { userId, dispatch } = this.props
+    dispatch({type: 'USER_FETCH_REQUESTED', payload: {userId}})
+  }
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+2. Initiate an effect
+```
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import Api from '...'
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+// Worker saga will be fired on USER_FETCH_REQUESTED actions
+function* fetchUser(action) {
+   try {
+      const user = yield call(Api.fetchUser, action.payload.userId);
+      yield put({type: "USER_FETCH_SUCCEEDED", user: user});
+   } catch (e) {
+      yield put({type: "USER_FETCH_FAILED", message: e.message});
+   }
+}
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+// Starts fetchUser on each dispatched USER_FETCH_REQUESTED action
+// Allows concurrent fetches of user
+function* mySaga() {
+  yield takeEvery("USER_FETCH_REQUESTED", fetchUser);
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+3. Testing
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. how to connect a component to the store?
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. what's a redux saga channel?
+2. what's the difference between take and take every?
+3. what's a blocking call?
+4. what is the definition of multithreading?
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+# reducers
+a redus saga store can have multiple reducers. 
+a reducer contain the data for a specific object
+```
+import ACTIONS from "../actions/constants";
+export function counterReducer(
+  state = {
+    counter: 0,
+  },
+  action
+) {
+  debugger;
+  switch (action.type) {
+    case ACTIONS.INCREMENT: {
+      state = {
+        ...state,
+        counter: state.counter+1
+      }
+      return state;
+    }
+    
+    default:
+      return state;
+  }
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+<a name="pookie"></a>
+# sagas
+sagas respresent the methods used to update the store values
+```
+function* incrementAync() {
+  debugger;
+  yield put({ type: ACTIONS.INCREMENT });
+  yield delay(1000);
+  yield put({ type: ACTIONS.DECREMENT });
+}
 
-### Making a Progressive Web App
+function* watchIncrementAsync() {
+  yield takeEvery(ACTIONS.INCREMENT_ASYNC, incrementAync);
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export function* rootSagas() {
+  yield all([watchIncrementAsync()]);
+}
 
-### Advanced Configuration
+``` 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# store
 
-### Deployment
+```
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import { counterReducer } from './reducers/counter-reducer';
+import { rootSagas } from './sagas/root-saga';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+const sagaMiddleware = createSagaMiddleware();
 
-### `npm run build` fails to minify
+export const store = createStore(counterReducer, applyMiddleware(sagaMiddleware));
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+sagaMiddleware.run(rootSagas);
+
+```
+
+# components
+
+## connection the store using redux `connect`
+
+```
+
+const action = (type) => () => ({ type });
+
+const mapState = (state) => {
+  debugger;
+  return {count: state.counter}
+}
+
+export const ConnectedCounter = connect(mapState, {
+  onIncrement: action(ACTIONS.INCREMENT),
+  onDecrement: action(ACTIONS.DECREMENT),
+  onIncrementAsync: action(ACTIONS.INCREMENT_ASYNC),
+})(Counter);
+```
+
+
