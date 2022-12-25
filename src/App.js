@@ -4,7 +4,7 @@ import Main from './components/main';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" test-id='test'>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

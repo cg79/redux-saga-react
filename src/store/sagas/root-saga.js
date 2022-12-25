@@ -28,11 +28,11 @@ export default function* rootSagas() {
   yield all([
     userSagas.watchGetUsersRequest(),
     userSagas.watchTake(),
+    userSagas.watchTakeMaybe(),
     userSagas.watchTakeFork(),
     userSagas.watchChannelRequests(),
     userSagas.watchChannelRequestsFork(),
     userSagas.watchCountDown(),
     // watchIncrementAsync()
-
   ]);
 }

@@ -18,6 +18,7 @@
     "start": "PORT=3007 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:e2e": "jest -c test/jest.config.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

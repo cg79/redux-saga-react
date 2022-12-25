@@ -170,7 +170,6 @@ function* watchGetUsersRequest() {
   yield takeLatest(USER_ACTIONS.GET_USERS_REQUEST_LATEST, getUsers);
   yield takeEvery(USER_ACTIONS.GET_USERS_REQUEST_EVERY, getUsers);
   yield takeLeading(USER_ACTIONS.GET_USERS_REQUEST_LEADING, getUsers);
-  yield takeMaybe(USER_ACTIONS.GET_USERS_REQUEST_MAYBE, getUsers);
 }
 
 function* watchTake() {
@@ -183,6 +182,14 @@ function* watchTake() {
       "GET_USERS_REQUEST_TAKE_UNBLOCK",
     ]);
     console.log("login response watchTake", loginResponse);
+  }
+}
+
+function* watchTakeMaybe() {
+  while (true) {
+    const loginPayload = yield takeMaybe('GET_USERS_SUCCESS');
+    console.log("take MAYBE payload", loginPayload);
+    
   }
 }
 
@@ -214,6 +221,8 @@ const userSagas = {
   callGetUsers,
   watchGetUsersRequest,
   watchTake,
+
+  watchTakeMaybe,
   watchTakeFork,
   watchChannelRequests,
   watchChannelRequestsFork,
