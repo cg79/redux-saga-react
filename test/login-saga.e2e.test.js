@@ -1,6 +1,5 @@
 import { setDefaultOptions } from 'expect-puppeteer';
 import puppeteer from 'puppeteer';
-import { LOGGED_IN, LOGGED_OUT, LOGIN_CANCELLED, LOGIN_ERROR } from './../src/statusTypes';
 
 
 setDefaultOptions({ timeout: 2000 });
@@ -29,38 +28,10 @@ describe('login saga effects, e2e tests', () => {
 
   test('standard login flow', async () => {
     await expect(page).toClick('button', { text: 'Login' });
-    await expect(page).toMatch(`status: ${LOGGED_IN}`);
+    await expect(page).toMatch(`status: aa`);
     await expect(page).toClick('button', { text: 'Logout' });
-    await expect(page).toMatch(`status: ${LOGGED_OUT}`);
+    await expect(page).toMatch(`status:aaa`);
   }, 5000);
-
-  test('login error flow', async () => {
-    await page.setRequestInterception(true);
-    page.on('request', request => {
-      if (request.url().endsWith('/login')) {
-        request.respond({
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          },
-          status: 500,
-        });
-      }
-      else {
-        request.continue();
-      }
-    });
-
-    await expect(page).toClick('button', { text: 'Login' });
-    await expect(page).toMatch(`status: ${LOGIN_ERROR}`);
-
-    await page.setRequestInterception(false);
-  }, 5000);
-
-  test('external cancellation', async () => {
-    await expect(page).toClick('button', { text: 'Login' });
-    await expect(page).toClick('button', { text: 'Logout' });
-    await expect(page).toMatch(`status: ${LOGIN_CANCELLED}`);
-  }, 5000);
+ 
 
 });
