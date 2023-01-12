@@ -25,6 +25,7 @@ Redux Saga is a middleware library that focuses on managing *side effects*
     - write the `login` method
 
 Authorize method
+
 `
 export function* loginFlow() {
   while (true) {
@@ -42,7 +43,7 @@ export function* loginFlow() {
     yield put({ type: 'LOGOUT_SUCCEEDED' })
   }
 }
-`    
+`
 
 
 
