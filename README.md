@@ -4,7 +4,9 @@
 # Table of contents
 
 1. [What is redux-saga](#what)
-2. [Effects](#effects)
+2. [How TO](#howto)
+    - [Login](#loginflow)
+3. [Effects](#effects)
 
 
 [Step By Step](#steps)
@@ -15,6 +17,32 @@ Redux is a state management library, while
 Redux Saga is a middleware library that focuses on managing *side effects*
 
 
+# How To <a name="howto"></a>
+# Login Flow <a name="loginflow"></a>
+1. `dispatch` an action to the store: {type: 'LOGIN_REQUESTED', payload: {user,password}}
+2. register saga `middleware` as "loginFlow"
+    - write the `authorize` method (used to call the back-end)
+    - write the `login` method
+
+Authorize method
+`
+export function* loginFlow() {
+  while (true) {
+    console.log('login flow started');
+    const { payload: { username, password } } = yield take('LOGIN_REQUESTED')
+    console.log('username, password', username, password);
+    const task = yield fork(authorize, username, password);
+    const action = yield take(['LOGOUT_REQUESTED', 'LOGIN_ERROR'])
+    if (action.type === 'LOGOUT_REQUESTED') {
+      yield cancel(task);
+    } else if (action.type === 'LOGIN_ERROR') {
+      console.log('LOGIN_ERROR', action.payload.error);
+    }
+
+    yield put({ type: 'LOGOUT_SUCCEEDED' })
+  }
+}
+`    
 
 
 
