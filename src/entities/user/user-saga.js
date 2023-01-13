@@ -219,6 +219,8 @@ function* watchTakeFork() {
 
 const userSagas = {
   callGetUsers,
+  apiGetUsers,
+  getUsers,
   watchGetUsersRequest,
   watchTake,
 

@@ -4,12 +4,13 @@
 # Table of contents
 
 1. [What is redux-saga](#what)
-2. [How TO](#howto)
+2. [Flow Example](#howto)
     - [Login](#loginflow)
 3. [Effects](#effects)
+4. [Step By Step](#steps)
+5. [QA](#qa)
 
 
-[Step By Step](#steps)
 
 # What is redux-saga <a name="what"></a>
 Redux is a state management library, while 
@@ -271,3 +272,118 @@ function* fetchUser(action) {
 
 
 
+
+# Questions and Answers <a name="qa"></a>
+1. how to get a API response?
+
+  ```
+  const response = yield call(registerUserService, payload);
+  ```
+
+2. how the redux store can be updated?
+```
+  yield put({ type: types.REGISTER_USER_SUCCESS, response })
+```
+
+3. how multiple actions can be executed only once? e.g. multiple components asks the get orders api
+  - use a blocking operation like `take`
+
+4. what would be a good directory structure? 
+  - actions for triggering the saga actions
+
+
+ 5. how a component can read data from store?
+   ```
+   import { select } from "redux-saga/effects";
+   yield select(state => state.credentials;);
+   ```  
+ 6. how you know if an action is cancelled?
+
+  
+  ```
+  import { cancelled, cancel } from 'redux-saga/
+  ...
+  const isLoggedIn = yield call(fakeLogin, username, password)
+
+  if (yield cancelled()) {
+        console.log('login cancelled')
+        yield put({ type: 'LOGIN_CANCELLED' })
+      }
+  ```
+
+  7. how you can wait for a response or action?
+
+  ```
+   const action = yield take(['LOGOUT_REQUESTED', 'LOGIN_ERROR'])
+
+  ```
+
+  8. how you can run multiple actions in the same time?
+  
+  ```
+  import { all, call } from 'redux-saga/effects'
+
+  // correct, effects will get executed in parallel
+  const [users, repos] = yield all([
+    call(fetch, '/users'),
+    call(fetch, '/repos')
+  ])
+  ```
+
+  9. how catch errors? 
+  A: just use try catch
+
+  10. how is the recommended way of testing a saga?
+  A: use the gen.next()
+
+  ```
+  function* gen1() {
+  yield 1;
+  return yield 2;
+}
+
+describe("gen1", () => {
+  const genObject = gen1();
+
+  it("should return 1", () => {
+    const val = genObject.next().value;
+    expect(val).toEqual(1);
+  });
+
+  it("should return 2", () => {
+    const val = genObject.next().value;
+    expect(val).toEqual(2);
+  });
+
+  it("should return undefined", () => {
+    const val = genObject.next().value;
+    expect(val).toEqual(undefined);
+  });
+});
+  ```
+
+  11: how an api can be mocked?
+
+  ```
+      const requestAuthors = jest.spyOn(api, 'requestAuthors')
+      .mockImplementation(() => Promise.resolve(dummyAuthors));
+
+      //https://medium.com/@13gaurab/unit-testing-sagas-with-jest-29a8bcfca028
+  ```
+
+  12. how to test with values instead of effects? 
+  
+  ```
+  You can use co package which wraps your generator in promise which is supported in Jest.
+
+  import co from 'co';
+
+  describe('generator test', () => {
+    it('should call generator function', co.wrap(function *() {
+        const user = { email:"test@test.com", password:"1234" };
+        const generator = login(user, {});
+
+        expect(generator).toBe(SOME_VALUE_HERE));
+    }));
+  });
+  ```
