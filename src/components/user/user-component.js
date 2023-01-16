@@ -137,6 +137,18 @@ const UserComponent = () => {
     <>
       <span>USERS</span>
 
+      
+
+      <div>
+        <button className={style.increment} onClick={()=> userActions.triggerLoginWorkshop(dispatch, {
+          user: 'my_user',
+          password: 'my_password'
+        })}>
+        triggerLoginWorkshop
+        </button>
+      </div>
+
+
       <div>
         <button className={style.increment} onClick={() => callGetUsers()}>
           callGetUsers

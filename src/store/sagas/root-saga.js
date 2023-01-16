@@ -33,6 +33,7 @@ export default function* rootSagas() {
     userSagas.watchChannelRequests(),
     userSagas.watchChannelRequestsFork(),
     userSagas.watchCountDown(),
+    userSagas.watchLoginWorkshop(),
     // watchIncrementAsync()
   ]);
 }

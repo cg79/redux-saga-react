@@ -1,5 +1,15 @@
 import USER_ACTIONS from "./constants";
 
+const triggerLoginWorkshop = (dispatch, payload) => {
+  debugger;
+  dispatch({
+    type: USER_ACTIONS.LOGIN_WORKSHOP,
+    payload,
+  });
+}
+
+
+
 const getUsersRequestTake = (dispatch, reqid) =>
   dispatch({
     type: USER_ACTIONS.GET_USERS_REQUEST_TAKE,
@@ -82,7 +92,8 @@ const userActions = {
   watchChannelRequests,
   watchChannelRequestsFork,
   getUsersSuccess,
-  channelCountDown
+  channelCountDown,
+  triggerLoginWorkshop
 };
 
 export default userActions;

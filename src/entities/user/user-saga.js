@@ -21,6 +21,48 @@ import apiGetUsers from "../../api";
 import userActions from "../../entities/user/user-actions";
 
 
+function loginApi(payload){
+  return new Promise((res, rej)=>{
+    setTimeout(()=>{
+      res({
+        token: 'my_token',
+        payload,
+      })
+    }, 1000)
+  })
+}
+
+
+function* executeLoginWorkshop(payload) {
+  try {
+    debugger;
+
+    console.log("functionregisterForLoginWorkshop");
+
+    const result = yield call(loginApi, payload);
+
+    console.log('login response ', result);
+
+    //yield put(userActions.getUsersSuccess(result));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function* watchLoginWorkshop() {
+  debugger;
+  while (true) {
+    debugger;
+    console.log('asdasd');
+    const loginPayload = yield take(USER_ACTIONS.LOGIN_WORKSHOP);
+    debugger;
+    console.log("take LOGIN_WORKSHOP");
+    yield call(executeLoginWorkshop, loginPayload);
+  }
+}
+
+
+
 
 function countdown(secs) {
   return eventChannel(emitter => {
@@ -229,6 +271,7 @@ const userSagas = {
   watchChannelRequests,
   watchChannelRequestsFork,
   watchCountDown,
+  watchLoginWorkshop,
 };
 
 export default userSagas;
